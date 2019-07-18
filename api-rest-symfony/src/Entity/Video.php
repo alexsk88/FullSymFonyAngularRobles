@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use JsonSerializable;
 
 /**
  * Videos
@@ -11,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="videos", indexes={@ORM\Index(name="fk_video_user", columns={"user_id"})})
  * @ORM\Entity
  */
-class Video
+class Video 
 {
     /**
      * @var int
@@ -67,7 +67,7 @@ class Video
     /**
      * @var \User
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\User" inversedBy="videos")
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="videos")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      * })
