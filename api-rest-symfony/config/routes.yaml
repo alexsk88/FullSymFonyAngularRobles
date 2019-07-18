@@ -6,6 +6,15 @@
 user:
    path: /user
    controller: App\Controller\UserController::index
+   methods: [POST]
+
+register:
+   path: /register
+   controller: App\Controller\UserController::register
+   methods: [POST]
+
+
+
 
 # Rutas para Controlador : usuarVideoio#
 video:

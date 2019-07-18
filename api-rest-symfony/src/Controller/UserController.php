@@ -7,13 +7,12 @@ use App\Entity\User;
 use App\Entity\Video;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-
-
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UserController extends AbstractController
 {
 
-    private function restJSON($data)
+    private function restjson($data)
     {
         // Conseguir servicio de Serializacion
         $json = $this->get('serializer')->serialize($data, 'json');
@@ -25,8 +24,7 @@ class UserController extends AbstractController
         $response->setContent($json);
 
         // Indicar formato de la respuesta
-        $response->setContent('Content-Type', 'application/json');
-
+        $response->headers->set('Content-Type', 'application/json');
 
         // Devolver una respuesta
         return $response;
@@ -64,6 +62,39 @@ class UserController extends AbstractController
         // }
         // die();
 
-        return $this->json($videos);
+        return $this->restjson($user);
+    }
+
+    public function register(Request $request)
+    {
+        // Recoger los datos por post
+        $json = $request->get('json', null);
+
+    
+        // Decodificar JSON
+        $params = json_decode($json, true);
+
+        // Devolver un rta por defectos
+
+        $data = [
+            'status'=> 'error',
+            'code' => 200,
+            'message' => 'El usuario no se ha creado',
+            'json' => $params
+        ];
+
+        // Validar datos
+
+        // Si la validacion es correcta
+
+        // Crear Objeto del Usuario
+
+        // Control de Duplicado
+
+        // Save datos
+
+        // Devolver una respuesta con la acccion
+
+        return new JsonResponse($data);
     }
 }
