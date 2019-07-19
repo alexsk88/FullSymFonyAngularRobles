@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Constraints\Email;
+use App\Services\JwtAuth;
 
 class UserController extends AbstractController
 {
@@ -43,7 +44,6 @@ class UserController extends AbstractController
         $users = $user_repo->findAll();
         $user = $user_repo->find(1);
 
-
         $videos = $video_repo->findAll();
 
         $data = [
@@ -72,7 +72,6 @@ class UserController extends AbstractController
         // Recoger los datos por post
         $json = $request->get('json', null);
 
-    
         // Decodificar JSON
         $params = json_decode($json);
         
@@ -93,6 +92,8 @@ class UserController extends AbstractController
             'params' => $params,
             'name' => $params->name
         ];
+
+        //return $this->restjson($data);
         // Validar datos
         if($json != null)
         {
@@ -108,11 +109,7 @@ class UserController extends AbstractController
             $validate_email = $validator->validate($email,[
                 new Email()
             ]);
-                
-            $data = [
-                'status'=> 'entro',
-                'name'=> $validate_email
-            ]; 
+
 
             if(!empty($name) && 
                !empty($surname) &&
@@ -120,8 +117,6 @@ class UserController extends AbstractController
                !empty($password) &&
                count($validate_email) == 0)
             {
-
-
                 // Crear Objeto del Usuario
 
                 $user = new User();
@@ -134,7 +129,6 @@ class UserController extends AbstractController
                 $pwd = hash('sha256', $password);
                 $user->setPassword($pwd);
 
-            
                 $doctrine = $this->getDoctrine();
                 $bd = $doctrine->getManager();
                 
@@ -177,9 +171,6 @@ class UserController extends AbstractController
                     'message' => 'Datos NOOOO Validos',
                 ];
             }
-
-            
-         
         }
         else 
         {
@@ -193,5 +184,68 @@ class UserController extends AbstractController
         // Devolver una respuesta con la acccion
         return $this->restjson($data);
 
+    }
+
+    public function login(Request $request, JwtAuth $jwtAuth)
+    {
+        // Recibir los datos 
+        $json = $request->get('json',null);
+        $params = json_decode($json);
+
+
+        // Array por defecto
+        $data = [
+            'status'=> 'error',
+            'code' => 200,
+            'message' => 'Error al loggearse'
+        ];
+        // Comprobar y valida datos
+
+        if($json != null)
+        {
+            $email = (!empty($params->email)) ? $params->email: null;
+            $password = (!empty($params->password)) ? $params->password: null;
+            $getToken = (!empty($params->getToken)) ? $params->getToken: null;
+
+            $validator = Validation::createValidator();
+
+            $validate_email = $validator->validate($email,[
+                new Email()
+            ]);
+
+            
+            if(!empty($email) && 
+               !empty($password) &&
+               count($validate_email) == 0)
+            {
+                // Cifrar la passsword
+
+                $pwd = hash('sha256', $password);
+
+                // Si todo es valido, llamaremos service para comprar
+                if($getToken)
+                {
+                    $singup = $jwtAuth->signup($email, $pwd, $getToken);
+                }
+                else 
+                {
+                    $singup = $jwtAuth->signup($email, $pwd);                
+                }
+
+                return new JsonResponse($singup);
+            }
+            else 
+            {
+                $data = [
+                    'status'=> 'error',
+                    'code' => 200,
+                    'message' => 'Email No Valido'
+                ];
+            }
+            
+        }
+        // Devolver RTA
+        return $this->restjson($data);
+     
     }
 }
