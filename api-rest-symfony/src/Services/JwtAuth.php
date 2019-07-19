@@ -64,4 +64,41 @@ class JwtAuth
         }
         return $data;
     }
+
+    public function checkToken($jwt , $getUser = null)
+    {
+        $auth = false;
+
+        try
+        {
+            $decoded = JWT::decode($jwt, $this->key, ['HS256']);
+        }
+        catch(\UnexpectedValueException $e)
+        {
+            $auth = false;
+        }
+        catch (\DomainException $e)
+        {
+            $auth = false;
+        }
+        
+
+        if($getUser && $getUser != null)
+        {
+            $auth = $decoded;
+        }
+        else
+        {
+            if(isset($decoded) && !empty($decoded) && is_object($decoded) && isset($decoded->sub))
+            {
+                $auth = true;
+            }
+            else
+            {
+                $auth = false;
+            }
+        }
+
+        return $auth;
+    }
 }

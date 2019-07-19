@@ -248,4 +248,110 @@ class UserController extends AbstractController
         return $this->restjson($data);
      
     }
+
+    public function edit(Request $request, JwtAuth $jwtAuth)
+    {
+        // Recoger cabecera de Autenticacion
+        $token = $request->headers->get('Authorization');
+
+        // Recojer Datos de Usuario para Update
+        
+        $json = $request->get('json', null);
+        $params = json_decode($json); 
+
+
+        // Crear un metodo CheckToken en JWT
+
+        $authCheck = $jwtAuth->checkToken($token);
+
+        if($authCheck)
+        {
+            // Coseguir Entity Mananger
+            $doctrine = $this->getDoctrine();
+
+            $bd = $doctrine->getManager();
+
+            // Conseguir Datos de usuario 
+            $UserAuth= $jwtAuth->checkToken($token, true);
+
+            $user_repo = $doctrine->getRepository(User ::class);
+            $userbd = $user_repo->findOneBy([
+                'id' => $UserAuth->sub
+            ]);
+
+            // Validar datos 
+            if($json != null)
+            {
+                $email = (!empty($params->email)) ? $params->email: null;
+                $name = (!empty($params->name)) ? $params->name: null;
+                $surname = (!empty($params->surname)) ? $params->surname: null;
+    
+                $validator = Validation::createValidator();
+                $validate_email = $validator->validate($email,[
+                    new Email()
+                ]);
+    
+                
+                if(!empty($email) && 
+                   !empty($name) &&
+                   !empty($surname) &&
+                   count($validate_email) == 0)
+                {
+                    // Comprobar duplicados
+                    $userDuplicado = $user_repo->findBy([
+                        'email' => $email
+                    ]);
+                    // var_dump($userDuplicado); die();
+                    if(count($userDuplicado) == 0 || $UserAuth->email == $email)
+                    {
+                        // Update User
+                        $userbd->setEmail($email);
+                        $userbd->setName($name);
+                        $userbd->setSurname($surname);
+                        // Sava User
+
+                        $bd->persist($userbd);
+                        $bd->flush();
+
+                        $data = [
+                            'status'=> 'success',
+                            'messague'=> 'Usuario Actulizado',
+                            'user' => $userbd
+                            ];
+                    }
+                    else
+                    {
+                        $data = [
+                            'status'=> 'error',
+                            'messague'=> 'Este email Ya esta en uso',
+                            ];
+                    }
+                    
+                }
+                else
+                {
+                    $data = [
+                        'status'=> 'error',
+                        'messague'=> 'Datos no Validos / o email no valido',
+                        ];
+                }
+            }
+            else
+            {
+                $data = [
+                    'status'=> 'error',
+                    'messague'=> 'No se enviaron datos',
+                    ];
+            }
+        }
+        else
+        {
+            $data = [
+                'status'=> 'error',
+                'messague'=> 'El Token es Invalido so',
+             ];
+        }
+
+        return new JsonResponse($data);
+    }
 }
