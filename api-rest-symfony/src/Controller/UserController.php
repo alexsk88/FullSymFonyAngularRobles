@@ -352,6 +352,6 @@ class UserController extends AbstractController
              ];
         }
 
-        return new JsonResponse($data);
+        return $this->restjson($data);
     }
 }
