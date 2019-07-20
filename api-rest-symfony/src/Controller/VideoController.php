@@ -126,4 +126,30 @@ class VideoController extends AbstractController
 
         return $this->restjson($data);
     }
+
+    public function videos()
+    {
+        // Recoger la cabecera de Auutenticacion
+
+        // Comprobar el Token
+
+        // Si es valido, conseguir identidad del Usuario
+
+        // Configurar el bundle de Paginacion
+
+        // Hacer una consulta para paginar
+
+        // Recoger el parametro de la URL
+
+        // Llamar al objeto de la Paginacion
+
+        // Preparar array de datos para devolver
+
+        $data = [
+            'status'=> 'error',
+            'messague'=> 'Lista de Vidios',
+         ];
+
+        return $this->restjson($data);
+    }
 }
