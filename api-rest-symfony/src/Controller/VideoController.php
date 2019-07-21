@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Constraints\Email;
 use App\Services\JwtAuth;
-
+use Knp\Component\Pager\PaginatorInterface;
 
 class VideoController extends AbstractController
 {
@@ -127,28 +127,71 @@ class VideoController extends AbstractController
         return $this->restjson($data);
     }
 
-    public function videos()
+    public function videos(Request $request, JwtAuth $jwtAuth, PaginatorInterface $paginator)
     {
         // Recoger la cabecera de Auutenticacion
+        $token = $request->headers->get('Authorization');
 
         // Comprobar el Token
 
-        // Si es valido, conseguir identidad del Usuario
+        $checkToken = $jwtAuth->checkToken($token);
 
-        // Configurar el bundle de Paginacion
+        if($checkToken)
+        {
+            // Si es valido, conseguir identidad del Usuario
 
-        // Hacer una consulta para paginar
+            $user_repo = $this->getDoctrine()->getRepository(User::class);
 
-        // Recoger el parametro de la URL
+            //  Conseguir User del Token
+            $userToken =  $jwtAuth->checkToken($token, true);
 
-        // Llamar al objeto de la Paginacion
+            $user = $user_repo->findBy([
+                'id' => $userToken->sub
+            ]);
 
-        // Preparar array de datos para devolver
+            // Configurar el bundle de Paginacion
+                /* Ver Documentacion knp_pagination */
 
-        $data = [
-            'status'=> 'error',
-            'messague'=> 'Lista de Vidios',
-         ];
+            // Hacer una consulta para paginar
+            $em    = $this->getDoctrine()->getManager();
+
+            $dql   = "SELECT v FROM App\Entity\Video v WHERE v.user = {$userToken->sub} ORDER BY v.id DESC";
+
+            $query = $em->createQuery($dql);
+
+            // Recoger el parametro de la URL
+
+            $page = $request->query->getInt('page', 1);
+
+            $item_per_page = 5;
+
+            // Llamar al objeto de la Paginacion
+
+            $pagination = $paginator->paginate($query, $page, $item_per_page);
+
+            $total= $pagination->getTotalItemCount();
+
+            // Preparar array de datos para devolver
+            $data = [
+                'status'=> 'success',
+                'code' => 200,
+                'messague'=> 'PAginacion',
+                'total_item_count' => $total,
+                'page_actual' => $page,
+                'item_per_page' => $item_per_page,
+                'total_page' =>  ceil($total / $item_per_page),
+                'videos' => $pagination,
+                'user' => $userToken->sub
+             ];
+        }
+        else
+        {
+            $data = [
+                'status'=> 'error',
+                'messague'=> 'Token No valido',
+             ];
+        }
+
 
         return $this->restjson($data);
     }
