@@ -195,4 +195,60 @@ class VideoController extends AbstractController
 
         return $this->restjson($data);
     }
+
+    public function video(Request $request, JwtAuth $jwtAuth, $id = null)
+    {
+        // Sacar el Token y Comprobar si es correccto
+        $token = $request->headers->get('Authorization', null);
+        $id = $request->get('id', null);
+        $checkToken = $jwtAuth->checkToken($token);
+
+        if($checkToken && $id != null)
+        {
+            // Sacar Identitad del Usuario
+            $userToken = $jwtAuth->checkToken($token, true);
+
+            $user_repo = $this->getDoctrine()->getRepository(User::class);
+            $userBd = $user_repo->findOneBy([
+                'id' => $userToken->sub
+            ]);
+     
+            // Sacar el obejto de video en base al ID
+
+            $video_repo = $this->getDoctrine()->getRepository(Video::class);
+
+            $videoUser = $video_repo->findBy([
+                'id' => $id,
+                'user' => $userBd
+            ]);
+            
+            // Veridicar si el video existe y sis es propiedad de Usuario 
+
+            if(count($videoUser) == 0)
+            {
+                $data = [
+                    'status'=> 'error',
+                    'messague'=> 'Video No encontrado'
+                 ];
+            }
+            else
+            {
+                $data = [
+                    'status'=> 'success',
+                    'messague'=> 'Video del usuario',
+                    'video' => $videoUser
+                 ];
+            }
+
+        }
+        else
+        {
+            $data = [
+                'status'=> 'error',
+                'messague'=> 'Token No valido / Id No enviado'
+             ];
+        }
+
+         return $this->restjson($data);
+    }
 }

@@ -34,7 +34,7 @@ video_new:
    controller: App\Controller\VideoController::create
    methods: [POST]
 
-videos:
-   path: /video/list
-   controller: App\Controller\VideoController::videos
+video_detail:
+   path: /video/detail/{id}
+   controller: App\Controller\VideoController::video
    methods: [GET]
