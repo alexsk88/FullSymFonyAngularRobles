@@ -41,7 +41,7 @@ class VideoController extends AbstractController
         ]);
     }
 
-    public function create(Request $request, JwtAuth $jwtAuth)
+    public function create(Request $request, JwtAuth $jwtAuth, $id=null)
     {
         // Recoger  la cabecera  de autenticacion
         $token = $request->headers->get('Authorization');
@@ -88,15 +88,55 @@ class VideoController extends AbstractController
                     $videonew->setCreatedAt(new \Datetime('now'));
                     $videonew->setUpdatedAt(new \Datetime('now'));
 
-                    $bd->persist($videonew);
-                    $bd->flush();
+                    // Recoger campos de texto
+                    $id = $request->get('id',null);
+                    if($id != null )
+                    {
+                        $video = $bd->getRepository(Video::class)->findOneBy(
+                            [
+                                'id' => $id,
+                                'user' => $user
+                            ]);
 
-                    $data = [
-                        'status'=> 'success',
-                        'code' => 200,
-                        'messague'=> 'Video Agregado',
-                        'video' =>  $videonew
-                    ];
+                        if(!is_object($video))
+                        {
+                            $data = [
+                                'status'=> 'error',
+                                'code' => 400,
+                                'messague'=> 'Video No Encontrado'
+                            ];
+                        }
+                        else
+                        {   
+                            $video->setTitle($title);
+                            $video->setDescription($description);
+                            $video->setUrl($url);
+                            $video->setStatus('normal');
+                            $video->setUpdatedAt(new \Datetime('now'));
+                            
+                            $bd->flush();
+                            
+                            $data = [
+                                'status'=> 'success',
+                                'code' => 200,
+                                'messague'=> 'Editado Video',
+                                'ide' => $video
+                            ];
+                        }
+                    }
+                    else
+                    {
+                        $bd->persist($videonew);
+                        $bd->flush();
+    
+                        $data = [
+                            'status'=> 'success',
+                            'code' => 200,
+                            'messague'=> 'Video Agregado',
+                            'video' =>  $videonew
+                        ];
+                    }
+                    
                 }
                 else
                 {
@@ -237,6 +277,70 @@ class VideoController extends AbstractController
                     'status'=> 'success',
                     'messague'=> 'Video del usuario',
                     'video' => $videoUser
+                 ];
+            }
+
+        }
+        else
+        {
+            $data = [
+                'status'=> 'error',
+                'messague'=> 'Token No valido / Id No enviado'
+             ];
+        }
+
+         return $this->restjson($data);
+    }
+
+    public function delete(Request $request, JwtAuth $jwtAuth, $id = null)
+    {
+        // Sacar el Token y Comprobar si es correccto
+        $token = $request->headers->get('Authorization', null);
+        $id = $request->get('id', null);
+        $checkToken = $jwtAuth->checkToken($token);
+
+        if($checkToken && $id != null)
+        {
+            // Sacar Identitad del Usuario
+            $userToken = $jwtAuth->checkToken($token, true);
+
+            $user_repo = $this->getDoctrine()->getRepository(User::class);
+            $userBd = $user_repo->findOneBy([
+                'id' => $userToken->sub
+            ]);
+     
+            // Sacar el obejto de video en base al ID
+
+            $video_repo = $this->getDoctrine()->getRepository(Video::class);
+
+            $videoUser = $video_repo->findBy([
+                'id' => $id,
+                'user' => $userBd
+            ]);
+            
+            // Veridicar si el video existe y sis es propiedad de Usuario 
+
+            if(count($videoUser) == 0)
+            {
+                $data = [
+                    'status'=> 'error',
+                    'messague'=> 'Este video No es tuyo o No existe'
+                 ];
+            }
+            else
+            {
+                $videotest = $video_repo->findOneBy(['id'=>$id]);
+                // Es lo mismo que videoUser, pero por alguna razon
+                // toca hacer una consulta con findOneBy
+                $bd = $this->getDoctrine()->getManager();
+                $bd->remove($videotest);
+                $bd->flush();
+
+                $data = [
+                    'status'=> 'success',
+                    'code' => 200,
+                    'messague'=> 'Video Eliminado',
+                    'video' => $videotest
                  ];
             }
 
