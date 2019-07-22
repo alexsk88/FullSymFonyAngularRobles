@@ -4,8 +4,20 @@
     "array-type": false,
     "arrow-parens": false,
     "deprecation": {
-      "severity": "warning"
+      "severity": "warn"
     },
+    "variable-name": {
+      "options": [
+        "check-format",
+        "allow-leading-underscore",
+        "allow-pascal-case",
+        "allow-snake-case",
+        "allow-trailing-underscore",
+      ]
+    },
+    "one-line": [true, "check-catch", "check-finally", "check-else"],
+    "no-trailing-whitespace": [false, "ignore-jsdoc"],
+    "space-before-function-paren": true,
     "component-class-suffix": true,
     "contextual-lifecycle": true,
     "directive-class-suffix": true,

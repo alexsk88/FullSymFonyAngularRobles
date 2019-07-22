@@ -213,7 +213,7 @@ class UserController extends AbstractController
                 new Email()
             ]);
 
-            
+            // return new JsonResponse($params);
             if(!empty($email) && 
                !empty($password) &&
                count($validate_email) == 0)
@@ -223,7 +223,7 @@ class UserController extends AbstractController
                 $pwd = hash('sha256', $password);
 
                 // Si todo es valido, llamaremos service para comprar
-                if($getToken)
+                if($getToken !=  null)
                 {
                     $singup = $jwtAuth->signup($email, $pwd, $getToken);
                 }

@@ -8,6 +8,5 @@ export class User
         public password: String,
         public role: String,
         public createdAt: String,
-
     ){}
 }

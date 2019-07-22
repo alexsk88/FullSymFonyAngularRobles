@@ -47,11 +47,21 @@ class JwtAuth
             // Comprobar el flag de GetToken
             if(!empty($getToken))
             {
-                $data = $jwt;
+                $data = [
+                    'status'=> 'success',
+                    'code' => 200,
+                    'message' => 'Obteniendo Token',
+                    'data' => $jwt
+                ];
             }
             else
             {
-                $data = $jwt = JWT::decode($jwt,$this->key, ['HS256']);
+                $data = [
+                    'status'=> 'success',
+                    'code' => 200,
+                    'message' => 'Obteniendo User del Token',
+                    'data' => JWT::decode($jwt,$this->key, ['HS256'])
+                ];
             }
         }
 

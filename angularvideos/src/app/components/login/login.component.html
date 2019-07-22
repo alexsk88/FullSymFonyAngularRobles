@@ -1,0 +1,40 @@
+<div class="estilo-titulos my-5"> 
+<h1>Inicia Sesion</h1>
+</div>
+<div class="row">
+    <div class="col-md-7">
+        <img class="img-fluid" src="assets/loginimg.png"  alt="">
+    </div>
+    <div class="col-md-5 ">
+        <div class="container mt-5 ">
+                <div class="w3-card-4 w3-border w3-round-xlarge">
+                    <form class="w3-container my-5 estilo-titulos " #formLogin="ngForm" 
+                    (ngSubmit)="enviarLogin(formLogin)">
+        
+                        <div *ngIf="error" class="alert alert-danger w3-center">
+                            El Email o Passwrod Son Inconrrectos
+                        </div>
+                        <div *ngIf="error == false" class="alert alert-success w3-center">
+                            Loggin Correcto <br> <small>Redireccionado a HOME &nbsp;</small>
+                            <img src="assets/chargued.svg" class="w3-spin" width="20" alt="">
+                        </div>
+                        <label>Email</label>
+                        <input class="w3-input" type="email" #email  name="email"
+                        [(ngModel)]="user.email" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                        <small *ngIf="email.invalid && email.touched"  class="w3-text-red">
+                            Email No valido
+                        </small>
+                        <br>
+                        <label>Password</label>
+                        <input class="w3-input" type="text" #password name="password"
+                        [(ngModel)]="user.password" required >
+                        <small *ngIf="password.invalid && password.touched"  class="w3-text-red">
+                            Password Obligatoria No valido
+                        </small>
+                    
+                        <button class="mt-5 btn-block w3-btn w3-red" [disabled]="formLogin.invalid">Entrar</button>
+                    </form> <br>
+                </div>
+        </div>
+    </div>
+</div>
