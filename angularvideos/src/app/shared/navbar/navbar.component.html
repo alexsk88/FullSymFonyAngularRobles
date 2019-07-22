@@ -23,24 +23,24 @@
 
       </ul>
 
-      <ul class="navbar-nav navbar-right">  
-        <li class="nav-item">
+      <ul class="navbar-nav navbar-right" style="margin-right: 100px" >  
+        <li class="nav-item" *ngIf="identity == null">
           <a class="nav-link" [routerLink]="['login']">Login</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" *ngIf="identity == null">
           <a class="nav-link" [routerLink]="['registro']">Registro</a>
         </li>
       
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" *ngIf="identity">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" 
             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Dropdown
+            {{ identity.name  }} {{ identity.surname }}
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
             <a class="dropdown-item" [routerLink]="['login']">Action</a>
             <a class="dropdown-item" href="#">Another action</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
+            <a class="dropdown-item pointer" (click)="logout()">Cerrar Sesion</a>
           </div>
         </li>
       </ul>
