@@ -1,1 +1,47 @@
-<p>video-new works!</p>
+<div class="container w3-animate-left">
+    <div class="estilo-titulos my-5">
+        <h1>Guardar Video Favorito</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-7">
+            <img class="img-fluid" src="assets/savevideo.png" alt="">
+        </div>
+        <div class="col-md-5 ">
+            <div class="container">
+                <div class="w3-card-4 pt-3 px-3 w3-border w3-round-xlarge">
+                    <form class="w3-container estilo-titulos " #formNewvideo="ngForm"
+                        (ngSubmit)="enviarNewVideo(formNewvideo)">
+
+                        <div class="alert alert-success w3-center" *ngIf="status">
+                            ¡ El video ha Sido agregado satisfactoriamente !
+                        </div>
+                        <label>Titulo</label>
+                        <input class="w3-input" type="text" #titulo name="titulo" 
+                        [(ngModel)]="video.title" required>
+                        <small *ngIf="titulo.invalid && titulo.touched" class="w3-text-red">
+                            Titlo No valido
+                        </small>
+                        <br>
+                        <label>Description</label>
+                        <input class="w3-input" type="text" #description name="description" 
+                        [(ngModel)]="video.description"
+                            required>
+                        <small *ngIf="description.invalid && description.touched" class="w3-text-red">
+                            Descripcion No Valida
+                        </small>
+                        <br>
+                        <label>URL</label>
+                        <input class="w3-input" type="text" #url name="url" 
+                        [(ngModel)]="video.url" required>
+                        <small *ngIf="url.invalid && url.touched" class="w3-text-red">
+                            URL No valida
+                        </small>
+
+                        <button class="mt-5 btn-block w3-btn w3-red" 
+                        [disabled]="formNewvideo.invalid">Entrar</button>
+                    </form> <br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
