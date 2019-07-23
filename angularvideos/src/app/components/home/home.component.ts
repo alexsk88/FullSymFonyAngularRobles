@@ -92,4 +92,20 @@ export class HomeComponent implements OnInit
     return  `http://img.youtube.com/vi/${arr[1]}/0.jpg`;
   }
 
+  eliminarvideo(id)
+  {
+    this._videoSV.delete(id, this.token).subscribe(
+      res=>
+      {
+        if(res.status == 'success')
+        {
+          let pageact = this._activeRoute.snapshot.paramMap.get("page");
+          this.getvideos(pageact);
+        }
+        console.log(res);
+        
+      },err=>{console.log(err);
+      }
+    )
+  }
 }

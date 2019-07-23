@@ -40,7 +40,7 @@ export class LoginComponent implements OnInit
             })
 
             setTimeout(() => {
-              this._router.navigate(['home']);
+              this._router.navigate(['home',1]);
             }, 3000);
         }
         else if (res.status == 'error')

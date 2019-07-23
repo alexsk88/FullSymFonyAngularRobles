@@ -14,11 +14,16 @@
         <li class="nav-item active">
             <a class="nav-link" >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
         </li>
-        <li class="nav-item active">
-          <a class="nav-link"  [routerLink]="['home']">Home <span class="sr-only">(current)</span></a>
+        <li class="nav-item active" *ngIf="identity">
+          <a class="nav-link"  [routerLink]="['home', 1]">Home 
+            <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item active" *ngIf="!identity">
+          <a class="nav-link"  [routerLink]="['home']">Home 
+            <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
+          <a class="nav-link" [routerLink]="['home']" >About</a>
         </li>
 
       </ul>
