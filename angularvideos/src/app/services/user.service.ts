@@ -31,6 +31,16 @@ export class UserService
     return this._http.post(`${this.url}login`, params,{headers});
   }
 
+  register(user: any): Observable<any>
+  {
+    let json = JSON.stringify(user);
+    let params = 'json='+json;
+
+    let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this._http.post(`${this.url}register`, params, {headers});
+  }
+
   getIdentity()
   {
     let identity = localStorage.getItem('identity');

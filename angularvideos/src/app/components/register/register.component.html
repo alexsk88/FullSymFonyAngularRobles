@@ -1,1 +1,54 @@
-<p>register works!</p>
+<div class="container w3-animate-left">
+    <div class="estilo-titulos my-5">
+        <h1>Registrate</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <img src="assets/register.png" class="img-fluid" alt="">
+        </div>
+        <div class="col-md-6">
+            <form class="w3-card w3-border w3-round-xlarge p-5 estilo-titulos"  
+                    #formRegister="ngForm" 
+            (ngSubmit)="enviarRegister(formRegister)">
+            
+                <div *ngIf="status" class="alert alert-success">
+                    Usuario Creado Satisfactoriamente
+                </div>
+
+                <label>Nombre</label>
+                <input class="w3-input" type="text" name="name" #name 
+                [(ngModel)]="user.name" required>
+                <small *ngIf="name.invalid && name.touched" class="w3-text-red">
+                    Nombre Invalido
+                </small>
+
+                <label>Apellido</label>
+                <input class="w3-input" type="text" name="surname" #surname 
+                [(ngModel)]="user.surname" required>
+                <small *ngIf="surname.invalid && surname.touched" class="w3-text-red">
+                    Apellido Invalido
+                </small>
+
+                <label>Email</label>
+                <input class="w3-input" type="email" name="email" #email 
+                [(ngModel)]="user.email" required 
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                <small *ngIf="email.invalid && email.touched" class="w3-text-red">
+                    Email Invalido
+                </small>
+
+                <label>Password</label>
+                <input class="w3-input" type="text" #password name="password" 
+                [(ngModel)]="user.password" required>
+                <small *ngIf="password.invalid && password.touched" class="w3-text-red">
+                    Password Obligatoria No valido
+                </small>            
+                
+                <button class="mt-5 btn-block w3-btn w3-red" 
+                [disabled]="formRegister.invalid">REGISTRARSE</button>
+
+            </form>
+        </div>
+    </div>
+</div>
