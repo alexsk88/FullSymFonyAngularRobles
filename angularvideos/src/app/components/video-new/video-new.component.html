@@ -1,6 +1,6 @@
-<div class="container w3-animate-left">
+<div class="container w3-animate-left" *ngIf="existviideo == true; else nofound">
     <div class="estilo-titulos my-5">
-        <h1>Guardar Video Favorito</h1>
+        <h1>{{ page_title }}</h1>
     </div>
     <div class="row">
         <div class="col-md-7">
@@ -10,10 +10,10 @@
             <div class="container">
                 <div class="w3-card-4 pt-3 px-3 w3-border w3-round-xlarge">
                     <form class="w3-container estilo-titulos " #formNewvideo="ngForm"
-                        (ngSubmit)="enviarNewVideo(formNewvideo)">
+                        (ngSubmit)="ngSubmit(formNewvideo)">
 
                         <div class="alert alert-success w3-center" *ngIf="status">
-                            ¡ El video ha Sido agregado satisfactoriamente !
+                            {{ msgrta }}
                         </div>
                         <label>Titulo</label>
                         <input class="w3-input" type="text" #titulo name="titulo" 
@@ -38,10 +38,16 @@
                         </small>
 
                         <button class="mt-5 btn-block w3-btn w3-red" 
-                        [disabled]="formNewvideo.invalid">Entrar</button>
+                        [disabled]="formNewvideo.invalid">{{ btntipo }}</button>
                     </form> <br>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<ng-template #nofound>
+        <div class="alert alert-danger">
+                Este video No existe
+            </div>
+</ng-template>

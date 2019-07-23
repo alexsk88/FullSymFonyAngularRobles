@@ -46,6 +46,8 @@ export class VideoService
 
   update(video:any, token: any): Observable<any>
   {
+    console.log(video);
+    
     let json = JSON.stringify(video);
     let params = 'json='+json;
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')

@@ -8,14 +8,16 @@ import { PageNoFoundComponent } from './components/page-no-found/page-no-found.c
 import { IdentityGuard } from './services/identity.guard';
 import { UserEditComponent } from './components/user-edit/user-edit.component';
 import { VideoNewComponent } from './components/video-new/video-new.component';
+import { VideoEditComponent } from './components/video-edit/video-edit.component';
 
 
 const routes: Routes = [
   {path:'', component: HomeComponent },
   {path:'home', component: HomeComponent },
-  {path:'home/:page', component: HomeComponent },
+  {path:'home/:page', component: HomeComponent,canActivate:[IdentityGuard] },
   {path:'login', component: LoginComponent },
   {path:'registro', component: RegisterComponent },
+  {path:'editar-video/:id', component: VideoEditComponent, canActivate:[IdentityGuard] },
   {path:'ajustes', component: UserEditComponent, canActivate:[IdentityGuard] },
   {path:'guardar-favorito', component: VideoNewComponent, canActivate:[IdentityGuard] },
   {path:'**', component: PageNoFoundComponent }

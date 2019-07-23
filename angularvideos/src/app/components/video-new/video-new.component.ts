@@ -14,6 +14,11 @@ export class VideoNewComponent implements OnInit
   public identity: any;
   public token : any;
   public status: boolean;
+  public page_title: string;
+  public btntipo: string;
+  public msgrta: string;
+
+  existviideo: boolean
 
   constructor(private _userSV: UserService,
               private _videoSV: VideoService)
@@ -21,6 +26,9 @@ export class VideoNewComponent implements OnInit
     this.identity = _userSV.getIdentity();
     this.token = _userSV.getToken();
 
+    this.page_title = 'Guardar Video Favorito'
+    this.btntipo = 'Agregar'
+    this.existviideo = true;
     this.video = new Video('',this.identity.sub,'','','','','','');
   }
 
@@ -29,14 +37,19 @@ export class VideoNewComponent implements OnInit
 
   }
 
-  enviarNewVideo(form:any)
+  ngSubmit(form:any)
   {
     console.log(this.video);
     this._videoSV.saveVideo(this.video, this.token).subscribe(
       res=>
       {
         // console.log(res);
+        this.msgrta = '¡El video ha Sido agregado satisfactoriamente!'
         this.status = true;
+
+        setTimeout(() => {
+          this.status = false;
+        }, 2000);
       },
       err=>{console.log(err);
       }
