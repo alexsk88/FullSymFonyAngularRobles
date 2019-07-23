@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {  LOCALE_ID, NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
@@ -14,6 +14,21 @@ import { IdentityGuard } from './services/identity.guard';
 import { UserService } from './services/user.service';
 import { UserEditComponent } from './components/user-edit/user-edit.component';
 import { VideoNewComponent } from './components/video-new/video-new.component';
+
+
+import { registerLocaleData } from '@angular/common';
+
+    // importar locales
+    import localePy from '@angular/common/locales/es-PY';
+    import localePt from '@angular/common/locales/pt';
+    import localeEn from '@angular/common/locales/en';
+
+
+    // registrar los locales con el nombre que quieras utilizar a la hora de proveer
+    registerLocaleData(localePy, 'es');
+    registerLocaleData(localePt, 'pt');
+    registerLocaleData(localeEn, 'en')
+   
 
 @NgModule({
   declarations: [
@@ -34,7 +49,8 @@ import { VideoNewComponent } from './components/video-new/video-new.component';
   ],
   providers: [
     IdentityGuard,
-    UserService
+    UserService,
+    { provide: LOCALE_ID, useValue: 'es-Py' }
   ],
   bootstrap: [AppComponent]
 })

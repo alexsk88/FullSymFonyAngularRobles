@@ -1,4 +1,4 @@
-<div class="container w3-animate-zoom" >
+<div class="container w3-animate-zoom" *ngIf="!identity; else videos">
     <div class="jumbotron">
         <h1 class="display-4">Favorite Youtube</h1>
         <p class="lead">Registrate y accede a una plataforma para que 
@@ -12,3 +12,48 @@
         role="button">Loggeate AQUI</a>
     </div>
 </div>
+
+<ng-template #videos>
+    
+    <div class="container w3-animate-zoom">
+        <div class="card-columns">
+            <div class="card w-100" *ngFor="let video of viideos">
+                <img [src]="getThimbail(video.url)" class="card-img-top" alt="..."/>
+                <div class="card-body">
+                    <h5 class="card-title">{{ video.title }}</h5>
+                    <p class="card-text">{{ video.desciption }}</p>
+                    <p>{{ getThimbail(video.url) }}</p>
+                    <p class="card-text"><small class="text-muted">
+                        {{ video.updatedAt | date:'fullDate' }}
+                    </small></p>
+                </div>
+                <div class="card-footer w3-center">
+                    <a href="" class="mr-2 btn btn-success">Leer</a>
+                    <a href="" class="mr-2 btn btn-warning">Editar</a>
+                    <a href="" class="btn btn-danger">Eliminar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" [routerLink]="[ '/home', prev_page ]" 
+                                aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+
+        <li class="page-item" *ngFor="let page of total_page">
+            <a class="page-link" [routerLink]="[ '/home', page ]" >
+                {{ page }}
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" [routerLink]="[ '/home', next_page ]" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+
+</ng-template>

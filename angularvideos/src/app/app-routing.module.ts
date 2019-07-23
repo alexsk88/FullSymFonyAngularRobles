@@ -13,6 +13,7 @@ import { VideoNewComponent } from './components/video-new/video-new.component';
 const routes: Routes = [
   {path:'', component: HomeComponent },
   {path:'home', component: HomeComponent },
+  {path:'home/:page', component: HomeComponent },
   {path:'login', component: LoginComponent },
   {path:'registro', component: RegisterComponent },
   {path:'ajustes', component: UserEditComponent, canActivate:[IdentityGuard] },
