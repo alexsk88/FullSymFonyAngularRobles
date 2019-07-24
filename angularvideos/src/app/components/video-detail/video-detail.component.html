@@ -1,0 +1,23 @@
+<div class="container w3-animate-zoom" *ngIf="video; else videonotfound" >
+
+        <h1>{{ video.title }}</h1>
+        <b>Agregado el: </b> 
+        <span class="badge badge-secondary"> {{ video.updatedAt | date: 'fullDate' }}</span>
+        <hr>
+
+        <p>
+        <iframe width="560" height="315" [src]="getVideoIframe(video.url)" 
+        frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </p>
+
+        <hr>
+        <span class="badge badge-primary"> {{ video.user.name + ' ' + video.user.surname}}</span>
+        <h4>{{ video.description }}</h4>
+</div>
+
+
+<ng-template #videonotfound>
+    <div class="alert alert-danger">
+        <h3>Video No Encontrado</h3>
+    </div>
+</ng-template>

@@ -9,6 +9,7 @@ import { IdentityGuard } from './services/identity.guard';
 import { UserEditComponent } from './components/user-edit/user-edit.component';
 import { VideoNewComponent } from './components/video-new/video-new.component';
 import { VideoEditComponent } from './components/video-edit/video-edit.component';
+import { VideoDetailComponent } from './components/video-detail/video-detail.component';
 
 
 const routes: Routes = [
@@ -18,6 +19,7 @@ const routes: Routes = [
   {path:'login', component: LoginComponent },
   {path:'registro', component: RegisterComponent },
   {path:'editar-video/:id', component: VideoEditComponent, canActivate:[IdentityGuard] },
+  {path:'detail-video/:id', component: VideoDetailComponent, canActivate:[IdentityGuard] },
   {path:'ajustes', component: UserEditComponent, canActivate:[IdentityGuard] },
   {path:'guardar-favorito', component: VideoNewComponent, canActivate:[IdentityGuard] },
   {path:'**', component: PageNoFoundComponent }

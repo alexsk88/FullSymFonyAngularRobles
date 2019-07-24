@@ -46,7 +46,8 @@ export class VideoService
 
   update(video:any, token: any): Observable<any>
   {
-    console.log(video);
+    console.log(video
+      );
     
     let json = JSON.stringify(video);
     let params = 'json='+json;

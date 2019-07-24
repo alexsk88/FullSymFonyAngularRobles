@@ -23,6 +23,7 @@ import { registerLocaleData } from '@angular/common';
     import localePt from '@angular/common/locales/pt';
     import localeEn from '@angular/common/locales/en';
 import { VideoEditComponent } from './components/video-edit/video-edit.component';
+import { VideoDetailComponent } from './components/video-detail/video-detail.component';
 
 
     // registrar los locales con el nombre que quieras utilizar a la hora de proveer
@@ -41,7 +42,8 @@ import { VideoEditComponent } from './components/video-edit/video-edit.component
     PageNoFoundComponent,
     UserEditComponent,
     VideoNewComponent,
-    VideoEditComponent
+    VideoEditComponent,
+    VideoDetailComponent
   ],
   imports: [
     BrowserModule,

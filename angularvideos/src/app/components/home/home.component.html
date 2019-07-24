@@ -28,7 +28,8 @@
                     </small></p>
                 </div>
                 <div class="card-footer w3-center">
-                    <a href="" class="mr-2 btn btn-success">Leer</a>
+                    <a href="" class="mr-2 btn btn-success"
+                    [routerLink]="[ '/detail-video', video.id ]" >Leer</a>
 
                     <a class="mr-2 btn btn-warning"
                         [routerLink]="[ '/editar-video', video.id ]">
